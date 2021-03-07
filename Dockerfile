@@ -1,12 +1,12 @@
-FROM python:3.6-alpine
+FROM python:3.9-alpine
 
-LABEL maintainer frosty5689 <frosty5689@gmail.com>
+LABEL maintainer TheVexedGerman <thevexedgerman@gmail.com>
 
 RUN apk add --no-cache --update \
     ca-certificates \
     tzdata \
  && update-ca-certificates \
- && pip install --upgrade --no-cache-dir setuptools pyinotify envparse \
+ && pip install --upgrade --no-cache-dir setuptools pyinotify envparse flask flask-wtf flask-bootstrap4 \
  && rm -rf /root/.cache
 
 ARG TRACKMA_VERSION=master
@@ -22,7 +22,7 @@ RUN apk add --no-cache --update --virtual build-dependencies wget unzip && \
     rm -rf /tmp/trackma-$TRACKMA_VERSION.zip && \
     apk del build-dependencies
 
-ADD run/* /opt/trackma/
+COPY run/ /opt/trackma/
 
 VOLUME /config
 
