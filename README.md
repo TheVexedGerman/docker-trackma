@@ -1,7 +1,7 @@
-[hub]: https://hub.docker.com/r/frosty5689/trackma/
+[hub]: https://hub.docker.com/r/thevexedgerman/trackma/
 
-# frosty5689/trackma
-[![](https://images.microbadger.com/badges/version/frosty5689/trackma.svg)](https://microbadger.com/images/frosty5689/trackma "Get your own version badge on microbadger.com")[![](https://images.microbadger.com/badges/image/frosty5689/trackma.svg)](https://microbadger.com/images/frosty5689/trackma "Get your own image badge on microbadger.com")[![Docker Pulls](https://img.shields.io/docker/pulls/frosty5689/trackma.svg)][hub][![Docker Stars](https://img.shields.io/docker/stars/frosty5689/trackma.svg)][hub]
+# thevexedgerman/trackma
+
 
 ## Usage
 
@@ -13,9 +13,26 @@ docker run -it \
   -e ACCOUNT_PASSWORD=YOUR_TRACKER_PASSWORD \
   -e ACCOUNT_API=YOUR_TRACKER \
   -e TZ=YOUR_TIMEZONE \
-  frosty5689/trackma
+  thevexedgerman/trackma
 ```
 This will run Trackma in interactive mode, to keep it running in background use `-id` or `--interactive --detach`
+
+If your chosen tracker need OAuth to authorize an application you can leave out the `ACCOUNT_PASSWORD` variable must add a port bind `-p 5000:5000`.
+
+An example of this would be:
+
+```
+docker run -it \
+  --name trackma \
+  -v /path/to/your/trackma/config:/config \
+  -e ACCOUNT_USERNAME=YOUR_TRACKER_USERNAME \
+  -e ACCOUNT_API=mal \
+  -e TZ=YOUR_TIMEZONE \
+  -p 5000:5000
+  thevexedgerman/trackma
+```
+
+To finish logging in you will need to open `http://yourdockerhost:5000` and follow the instuctions to become authorized.
 
 ## Plex Example
 
@@ -24,7 +41,7 @@ docker run -id \
   --name trackma \
   -v /path/to/your/trackma/config:/config \
   -e ACCOUNT_USERNAME=trackma \
-  -e ACCOUNT_PASSWORD=supersecretpassword \
+  -p 5000:5000
   -e ACCOUNT_API=mal \
   -e TZ=YOUR_TIMEZONE \
   -e AUTOSEND_MINUTES=15 \
@@ -47,6 +64,7 @@ It is important to use your Plex username to login instead of email or you may e
 * `-e ACCOUNT_PASSWORD` - Your password of the tracker you will be using
 * `-e ACCOUNT_API` - The abbreviation of the tracker you will be using (anilist|kitsu|mal|shikimori|vndb)
 * `-e TZ` - Timezone Trackma will run in
+* `-p x:5000` - The port the authentication portal is accessible on.
 * Trackma configurations can be overriden by setting container environment variables:
     * Simple set the configuration you want to configure using `-e EXAMPLE=value` uppercasing the configuration key
     * For example using `-e SEARCHDIR="/mymedia/videos"` will change the directory Trackma scans for video files
